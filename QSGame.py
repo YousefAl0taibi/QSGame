@@ -1,5 +1,7 @@
 import csv
+import copy
 from collections import deque
+Questions={}
 def Hashmap(filename,key_column):
     hashmap={}
     with open(filename,newline='',encoding='utf-8') as file:
@@ -13,13 +15,20 @@ filename='311CSC_Project_Dataset.csv'
 keycolumn='Name'
 hashmap=Hashmap(filename,keycolumn)
 class Node:
-    def __init__(self,key):
+    def __init__(self,question=None,data=None):
         self.left=None
         self.right=None
-        self.value=key
+        self.question=question
+        self.data=data
 class BST:
-    def __init__(self):
-        self.root=None
+    def __init__(self,data:dict,question:str,attr:str,attr_value:str):
+        self.root=Node(question)
+        self.leavs(data,attr,attr_value)
+    def leavs(self,data:dict,attr:str,attr_value:str):
+        left_data={key:val for key,val in data.items() if val.get(attr)==attr_value}
+        right_data={key:val for key,val in data.items() if val.get(attr)!=attr_value}
+        self.root.left=Node(data=left_data)
+        self.root.right=Node(data=right_data)
     def insert(self,root,answer,key):
         if root is None:
             return Node(key)
@@ -30,28 +39,23 @@ class BST:
         else:
             print('wrong input')
         return root
-    def preorder(self, root):
-        if root:
-            print(root.value, end=" ") 
-            self.preorder(root.left)
-            self.preorder(root.right)
-    def level_order(self):
-        if self.root is None:
-            return
+ #-----------------------------------------من هنا وتحت مو من ضمن الكود  
+    def print_tree(self):
+        print(f"Question: {self.root.question}")
+        print("\nLeft (Yes answer):")
+        for name, info in self.root.left.data.items():
+            print(f"{name}: {info}")
+        print("\nRight (No answer):")
+        for name, info in self.root.right.data.items():
+            print(f"{name}: {info}")
+     
+       
+bst=BST(hashmap,"is the person male","Gender","Male")
+bst.print_tree()
+def BestQS(Hashmap):
+    HashC=copy.deepcopy(Hashmap)
+    
 
-        queue = deque()
-        queue.append(self.root)
 
-        while queue:
-            current = queue.popleft()
-            print(current.value, end=' ')
-            if current.left:
-                queue.append(current.left)
-            if current.right:
-                queue.append(current.right)
-bst=BST()
-bst.root=bst.insert(bst.root,'Yes','hello')
-bst.insert(bst.root,'No','how are you')
-bst.insert(bst.root,'Yes','how old')
-bst.insert(bst.root,'Yes','okio')
-bst.level_order()
+    pass
+print(abs(sum(1 for d in hashmap.values() if d['Gender']=="Male")-sum(1 for d in hashmap.values() if d['Gender']=="Female")))
