@@ -92,10 +92,10 @@ class BST:
 
         
             if user_input == "Yes":
-                current_data = {k: v for k, v in current_data.items() if v[attr] == attr_value}
+                current_data = {k:val for k,val in current_data.items() if val[attr] == attr_value}
 
             elif user_input == "No":
-                current_data = {k: v for k, v in current_data.items() if v[attr] != attr_value}
+                current_data = {k:val for k,val in current_data.items() if val[attr] != attr_value}
 
         
             questions_copy = {key: val for key, val in questions_copy.items() if key!=qskey}
