@@ -29,7 +29,7 @@ def Hashmap(filename,key_column):
         reader=csv.DictReader(file)
         for row in reader:
             key=row[key_column]
-            data={k:v for k,v in row.items() if k!=key_column}
+            data={k:val for k,val in row.items() if k!=key_column}
             hashmap[key]=data
     return hashmap
 
