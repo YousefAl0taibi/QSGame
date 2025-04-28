@@ -1,16 +1,15 @@
 import csv
 import copy
-from collections import deque
-from collections import defaultdict
 
 def generate_QS(filename, key_column):
-    attributes_values = defaultdict(set)
-    
+    attributes_values = {}
     with open(filename, newline='', encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             for attr, val in row.items():
-                if attr != key_column  and not(val=="Female" or val=="No"):  
+                if attr != key_column  and not(val=="Female" or val=="No"):
+                    if attr not in attributes_values:
+                        attributes_values[attr] = set()  
                     attributes_values[attr].add(val)
 
     questions = {}
@@ -54,8 +53,8 @@ class BST:
         if node is None:
             return Node(question, data)
 
-        left_data = {key: val for key, val in data.items() if val.get(attr) == attr_value}
-        right_data = {key: val for key, val in data.items() if val.get(attr) != attr_value}
+        left_data = {key:val for key,val in data.items() if val.get(attr) == attr_value}
+        right_data = {key:val for key,val in data.items() if val.get(attr) != attr_value}
         node.question = question
         node.left = Node(question,data=left_data)
         node.right = Node(question,data=right_data)
@@ -83,7 +82,7 @@ class BST:
             attr, attr_value = questions_copy[qskey]
 
             print(f"\nQuestion: {qskey}")
-            user_input = input("\n(Yes/No)? ").strip().capitalize()
+            user_input = input("\n(Yes/No)? \n").strip().capitalize()
 
             while user_input not in ["Yes", "No"]:
                user_input = input("Please enter Yes or No: ").strip().capitalize()
@@ -109,22 +108,22 @@ class BST:
         print("Worst Case:50 Questions")
             
             
-
-
-
     def print_tree(self, node, answer:str):
         if node is None:
             return
-
-        print("remaining names:\n")
-
-        for name in node.data.keys():
-            print(f"({name})", end=" ")
-        print("\n")
-
+        
         if len(node.data) == 1:
-            print("{"+f"Final Answer: {list(node.data.keys())[0]}"+"}\n")
+            print("\n{"+f"Final Answer: {list(node.data.keys())[0]}"+"}\n")
             return
+        
+        else:
+            print("remaining names:\n")
+
+            for name in node.data.keys():
+                print(f"({name})", end=" ")
+            print("\n")
+
+        
 
         if answer:
             
